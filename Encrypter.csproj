@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Pictures\black-led.png" />
+    <None Remove="Pictures\copy.png" />
+    <None Remove="Pictures\cross.png" />
+    <None Remove="Pictures\download.png" />
+    <None Remove="Pictures\green-led.png" />
+    <None Remove="Pictures\metal-button.png" />
+    <None Remove="Pictures\plus.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Pictures\green-led.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Pictures\black-led.png" />
+    <Resource Include="Pictures\copy.png" />
+    <Resource Include="Pictures\cross.png" />
+    <Resource Include="Pictures\download.png" />
+    <Resource Include="Pictures\metal-button.png" />
+    <Resource Include="Pictures\plus.png" />
+  </ItemGroup>
+
+</Project>

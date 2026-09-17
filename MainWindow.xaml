@@ -1,0 +1,355 @@
+﻿<Window x:Class="Encrypter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Encrypter"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local:TextBoxConverter x:Key="TextBoxConv" Divisor="15" MinFontSize="12" MaxFontSize="100"/>
+        <local:TextBoxConverter x:Key="TextBoxConv2" Divisor="8" MinFontSize="17" MaxFontSize="100" />
+        <local:FontSizeToPaddingConverter x:Key="PaddingConv" Factor="0.27"/>
+        <Style x:Key="ActiveTabButton" TargetType="Button">
+            <Setter Property="Background" Value="#434347" />
+            <Setter Property="BorderBrush" Value="#7F7F87" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="NonActiveTabButton" TargetType="Button">
+            <Setter Property="Background" Value="#29292B" />
+            <Setter Property="BorderBrush" Value="#7F7F87" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Foreground" Value="Gray" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MetalButton" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="Transparent"
+                            CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="HelpButton" TargetType="Button">
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="BorderBrush" Value="#6B6A69"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter x:Name="Content"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  RenderTransformOrigin="0.5,0.5">
+                                <ContentPresenter.RenderTransform>
+                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                </ContentPresenter.RenderTransform>
+                            </ContentPresenter>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Content" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CircleButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="50"
+                            RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                            </Border.RenderTransform>
+                            <ContentPresenter x:Name="Content"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid UseLayoutRounding="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="37*" />
+            <RowDefinition Height="503*" />
+        </Grid.RowDefinitions>
+        <Grid x:Name="tabPanel" Grid.Row="0" Height="Auto" Background="#161617">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="13*"/>
+                <ColumnDefinition Width="13*"/>
+                <ColumnDefinition Width="13*"/>
+                <ColumnDefinition Width="57*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="caesarTab" Grid.Column="0" Width="Auto" Height="Auto" Content="Caesar"
+                Style="{StaticResource ActiveTabButton}" BorderThickness="0" Click="TabButton_Click"/>
+            <Button x:Name="vigenereTab" Grid.Column="1" Width="Auto" Height="Auto" Content="Vigenère"
+                Style="{StaticResource NonActiveTabButton}" BorderThickness="1,0,0,1" Click="TabButton_Click"/>
+            <Button x:Name="xorTab" Grid.Column="2" Width="Auto" Height="Auto" Content="XOR"
+                Style="{StaticResource NonActiveTabButton}" BorderThickness="1,0,0,1" Click="TabButton_Click"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#434347" Offset="0.0" />
+                    <GradientStop Color="#29292B" Offset="0.9" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="289*" />
+                <RowDefinition Height="717*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="18*"/>
+                <ColumnDefinition Width="17*"/>
+            </Grid.ColumnDefinitions>
+            <Viewbox Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left">
+                <TextBlock x:Name="cipderTitle" Grid.Column="0" Grid.Row="0" Text="Caesar"
+                Foreground="White" FontFamily="Arial" FontStyle="Italic" FontWeight="Bold" Opacity="0.5"/>
+            </Viewbox>
+            <Grid Grid.Row="1" Grid.ColumnSpan="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="193*" />
+                    <RowDefinition Height="230*" />
+                    <RowDefinition Height="32*" />
+                    <RowDefinition Height="230*" />
+                    <RowDefinition Height="43*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="179*" />
+                    <ColumnDefinition Width="602*" />
+                    <ColumnDefinition Width="32*" />
+                    <ColumnDefinition Width="147*" />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="11*" />
+                        <ColumnDefinition Width="32*" />
+                        <ColumnDefinition Width="21*" />
+                        <ColumnDefinition Width="32*" />
+                        <ColumnDefinition Width="200*" />
+                        <ColumnDefinition Width="11*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="19*" />
+                            <ColumnDefinition Width="8*" />
+                            <ColumnDefinition Width="15*" />
+                            <ColumnDefinition Width="8*" />
+                            <ColumnDefinition Width="19*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35*" />
+                            <RowDefinition Height="25*" />
+                            <RowDefinition Height="60*" />
+                            <RowDefinition Height="19*" />
+                            <RowDefinition Height="42*" />
+                            <RowDefinition Height="30*" />
+                        </Grid.RowDefinitions>
+                        <Viewbox Grid.Column="2" Grid.Row="0">
+                            <Image x:Name="encryptLED" Source="pack://application:,,,/Pictures/green-led.png" />
+                        </Viewbox>
+                        <Viewbox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3">
+                            <RadioButton x:Name="encryptButton" Style="{StaticResource MetalButton}"
+                                     GroupName="EncryptDecrypt" Checked="EncryptButton_Checked">
+                                <Image Source="pack://application:,,,/Pictures/metal-button.png" />
+                            </RadioButton>
+                        </Viewbox>
+                        <Viewbox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5">
+                            <TextBlock Text="encrypt" Foreground="White" FontFamily="Bahnschrift"/>
+                        </Viewbox>
+                    </Grid>
+                    <Grid Grid.Column="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="19*" />
+                            <ColumnDefinition Width="8*" />
+                            <ColumnDefinition Width="15*" />
+                            <ColumnDefinition Width="8*" />
+                            <ColumnDefinition Width="19*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35*" />
+                            <RowDefinition Height="25*" />
+                            <RowDefinition Height="60*" />
+                            <RowDefinition Height="19*" />
+                            <RowDefinition Height="42*" />
+                            <RowDefinition Height="30*" />
+                        </Grid.RowDefinitions>
+                        <Viewbox Grid.Column="2" Grid.Row="0">
+                            <Image x:Name="decryptLED" Source="pack://application:,,,/Pictures/black-led.png" />
+                        </Viewbox>
+                        <Viewbox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3">
+                            <RadioButton x:Name="decryptButton" Style="{StaticResource MetalButton}"
+                                     GroupName="EncryptDecrypt" Checked="DecryptButton_Checked">
+                                <Image Source="pack://application:,,,/Pictures/metal-button.png" />
+                            </RadioButton>
+                        </Viewbox>
+                        <Viewbox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5">
+                            <TextBlock Text="decrypt" Foreground="White" FontFamily="Bahnschrift"/>
+                        </Viewbox>
+                    </Grid>
+                    <Grid Grid.Row="0" Grid.Column="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="5*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="4*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="4*" />
+                            <RowDefinition Height="2*" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="1" Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="5*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+                            <Viewbox Grid.Row="1" HorizontalAlignment="Right">
+                                <TextBlock x:Name="alphabetLabel" Text="alphabet" Foreground="White" FontFamily="Bahnschrift" Margin="0,0,10,0"/>
+                            </Viewbox>
+                        </Grid>
+                        <Grid Grid.Row="3" Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="5*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+                            <Viewbox Grid.Row="1" HorizontalAlignment="Right">
+                                <TextBlock x:Name="keyLabel" Text="key" Foreground="White" FontFamily="Bahnschrift" Margin="0,0,10,0"/>
+                            </Viewbox>
+                        </Grid>
+                        <TextBox x:Name="alphabetInput" Grid.Row="1" Grid.Column="2" FontFamily="Bahnschrift"
+                             FontSize="{Binding ActualWidth, RelativeSource={RelativeSource Self}, 
+                                Converter={StaticResource TextBoxConv}}" Text="abcdefghijklmnopqrstuvwxyz"
+                             Padding="{Binding FontSize, RelativeSource={RelativeSource Self},
+                                Converter={StaticResource PaddingConv}}" BorderThickness="2"/>
+                        <TextBox x:Name="keyInput" Grid.Row="3" Grid.Column="2" FontFamily="Bahnschrift"
+                             FontSize="{Binding ActualWidth, RelativeSource={RelativeSource Self}, 
+                                Converter={StaticResource TextBoxConv}}"
+                             Padding="{Binding FontSize, RelativeSource={RelativeSource Self},
+                                Converter={StaticResource PaddingConv}}" BorderThickness="2"/>
+                    </Grid>
+                </Grid>
+                <TextBox x:Name="textInput" Grid.Column="1" Grid.Row="1" FontFamily="Bahnschrift" TextWrapping="Wrap"
+                     FontSize="{Binding ActualHeight, RelativeSource={RelativeSource Self}, 
+                        Converter={StaticResource TextBoxConv2}}" BorderThickness="2"
+                     Padding="{Binding FontSize, RelativeSource={RelativeSource Self},
+                        Converter={StaticResource PaddingConv}}"/>
+                <TextBox x:Name="textOutput" Grid.Column="1" Grid.Row="3" FontFamily="Bahnschrift" TextWrapping="Wrap"
+                     FontSize="{Binding ActualHeight, RelativeSource={RelativeSource Self}, 
+                        Converter={StaticResource TextBoxConv2}}" BorderThickness="2"
+                     Padding="{Binding FontSize, RelativeSource={RelativeSource Self},
+                        Converter={StaticResource PaddingConv}}" IsReadOnly="True"/>
+                <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1">
+                    <Viewbox Grid.Row="1">
+                        <Button Background="#E39576" Style="{StaticResource HelpButton}">
+                            <Image Source="pack://application:,,,/Pictures/cross.png" Width="12" Height="12" />
+                        </Button>
+                    </Viewbox>
+                    <Viewbox Grid.Row="0">
+                        <Button Style="{StaticResource HelpButton}">
+                            <Image Source="pack://application:,,,/Pictures/plus.png" Width="12" Height="12"/>
+                        </Button>
+                    </Viewbox>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="3">
+                    <Viewbox Grid.Row="0">
+                        <Button Background="#E3C776" Style="{StaticResource HelpButton}">
+                            <Image Source="pack://application:,,,/Pictures/copy.png" Width="12" Height="12"/>
+                        </Button>
+                    </Viewbox>
+                    <Viewbox Grid.Row="1">
+                        <Button Background="#76E37A" Style="{StaticResource HelpButton}">
+                            <Image Source="/Pictures/download.png" Width="12" Height="12"/>
+                        </Button>
+                    </Viewbox>
+                </StackPanel>
+                <Grid Grid.Column="0" Grid.Row="1" Grid.RowSpan="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Viewbox Grid.Row="1" Grid.Column="1">
+                        <Button x:Name="mainButton" Style="{StaticResource CircleButton}"
+                            Width="25" Height="25" Content="Encrypt"
+                            BorderBrush="#785129"
+                            FontFamily="Bahnschrift" FontSize="5">
+                            <Button.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#E09746" Offset="0.0" />
+                                    <GradientStop Color="#A67033" Offset="1" />
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                    </Viewbox>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
