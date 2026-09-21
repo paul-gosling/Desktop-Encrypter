@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Encrypter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="563" Width="1000">
     <Window.Resources>
         <local:TextBoxConverter x:Key="TextBoxConv" Divisor="15" MinFontSize="12" MaxFontSize="100"/>
         <local:TextBoxConverter x:Key="TextBoxConv2" Divisor="8" MinFontSize="17" MaxFontSize="100" />
@@ -280,14 +280,15 @@
                         </Grid>
                         <TextBox x:Name="alphabetInput" Grid.Row="1" Grid.Column="2" FontFamily="Bahnschrift"
                              FontSize="{Binding ActualWidth, RelativeSource={RelativeSource Self}, 
-                                Converter={StaticResource TextBoxConv}}" Text="abcdefghijklmnopqrstuvwxyz"
+                                Converter={StaticResource TextBoxConv}}"
                              Padding="{Binding FontSize, RelativeSource={RelativeSource Self},
                                 Converter={StaticResource PaddingConv}}" BorderThickness="2"/>
                         <TextBox x:Name="keyInput" Grid.Row="3" Grid.Column="2" FontFamily="Bahnschrift"
                              FontSize="{Binding ActualWidth, RelativeSource={RelativeSource Self}, 
                                 Converter={StaticResource TextBoxConv}}"
                              Padding="{Binding FontSize, RelativeSource={RelativeSource Self},
-                                Converter={StaticResource PaddingConv}}" BorderThickness="2"/>
+                                Converter={StaticResource PaddingConv}}" BorderThickness="2"
+                                 TextChanged="KeyInput_TextChanged"/>
                     </Grid>
                 </Grid>
                 <TextBox x:Name="textInput" Grid.Column="1" Grid.Row="1" FontFamily="Bahnschrift" TextWrapping="Wrap"
@@ -339,7 +340,8 @@
                         <Button x:Name="mainButton" Style="{StaticResource CircleButton}"
                             Width="25" Height="25" Content="Encrypt"
                             BorderBrush="#785129"
-                            FontFamily="Bahnschrift" FontSize="5">
+                            FontFamily="Bahnschrift" FontSize="5"
+                            Click="MainButton_Click">
                             <Button.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                     <GradientStop Color="#E09746" Offset="0.0" />

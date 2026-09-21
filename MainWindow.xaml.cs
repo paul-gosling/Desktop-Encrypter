@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Encrypter.Ciphers;
 
 namespace Encrypter
 {
@@ -17,15 +19,16 @@ namespace Encrypter
     public partial class MainWindow : Window
     {
         private Button currentActiveTab;
-        private bool encrypt;
+        private bool isEncrypting;
+        private Caesar caesar;
 
         public MainWindow()
         {
             InitializeComponent();
             currentActiveTab = caesarTab;
             encryptButton.IsChecked = true;
-
-            System.Diagnostics.Debug.WriteLine("Hello");
+            alphabetInput.Text = "abcdefghijklmnopqrstuvwxyz";
+            caesar = new Caesar(alphabetInput.Text);
         }
 
         public void TabButton_Click(object sender, RoutedEventArgs e)
@@ -100,9 +103,9 @@ namespace Encrypter
             decryptLED.Source = new BitmapImage(new Uri("pack://application:,,,/Encrypter;component/Pictures/black-led.png"));
             encryptLED.Source = new BitmapImage(new Uri("pack://application:,,,/Encrypter;component/Pictures/green-led.png"));
             mainButton.Content = "Encrypt";
-            encrypt = true;
+            isEncrypting = true;
 
-            //MessageBox.Show($"encrypt = {encrypt}");
+            //MessageBox.Show($"isEncrypting = {isEncrypting}");
         }
 
         public void DecryptButton_Checked(object sender, RoutedEventArgs e)
@@ -110,9 +113,38 @@ namespace Encrypter
             encryptLED.Source = new BitmapImage(new Uri("pack://application:,,,/Encrypter;component/Pictures/black-led.png"));
             decryptLED.Source = new BitmapImage(new Uri("pack://application:,,,/Encrypter;component/Pictures/green-led.png"));
             mainButton.Content = "Decrypt";
-            encrypt = false;
+            isEncrypting = false;
 
-            //MessageBox.Show($"encrypt = {encrypt}");
+            //MessageBox.Show($"isEncrypting = {isEncrypting}");
+        }
+
+        public void KeyInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (currentActiveTab.Name == "caesarTab" && sender is TextBox keyInput)
+            {
+                if (keyInput.Text.Length > 1)
+                {
+                    keyInput.Text = keyInput.Text[0].ToString();
+                }
+            }
+        }
+
+        public void MainButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (currentActiveTab.Name)
+            {
+                case "caesarTab":
+                    if (string.IsNullOrEmpty(keyInput.Text))
+                        break;
+
+                    if (caesar.Alphabet != alphabetInput.Text)
+                        caesar = new Caesar(alphabetInput.Text);
+
+                    textOutput.Text = isEncrypting
+                        ? caesar.Encrypt(textInput.Text, keyInput.Text[0])
+                        : caesar.Decrypt(textInput.Text, keyInput.Text[0]);
+                    break;
+            }
         }
     }
 }

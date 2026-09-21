@@ -16,8 +16,6 @@ namespace Encrypter
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            System.Diagnostics.Debug.WriteLine($"CONVERT: value={value}");
-
             if (value is double width && width > 0)
             {
                 var size = width / Divisor;

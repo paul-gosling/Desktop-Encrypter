@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+
+	<GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +31,12 @@
     <Resource Include="Pictures\download.png" />
     <Resource Include="Pictures\metal-button.png" />
     <Resource Include="Pictures\plus.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<Compile Remove="EncrypterTests\**\*.cs" />
+	<None Include="EncrypterTests\**\*.cs" />
+	<Page Remove="EncrypterTests\**\*.xaml" />
   </ItemGroup>
 
 </Project>
