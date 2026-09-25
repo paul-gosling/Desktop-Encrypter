@@ -110,24 +110,36 @@ namespace Encrypter.Ciphers
 
         private char EncryptOneLetter(char letter, int offset)
         {
-            if (!letterToOffset.ContainsKey(letter))
+            if (letterToOffset.TryGetValue(letter, out var letterIndex))
+            {
+                return offsetToLetter[(letterIndex + offset) % Alphabet.Length];
+            }
+
+            var swappedRegister = char.IsUpper(letter) ? char.ToLower(letter) : char.ToUpper(letter);
+
+            if (!letterToOffset.TryGetValue(swappedRegister, out letterIndex))
                 return letter;
 
-            var letterIndex = letterToOffset[letter];
-            var encryptedIndex = (letterIndex + offset) % Alphabet.Length;
+            var result = offsetToLetter[(letterIndex + offset) % Alphabet.Length];
 
-            return offsetToLetter[encryptedIndex];
+            return char.IsUpper(letter) ? char.ToUpper(result) : char.ToLower(result);
         }
 
         private char DecryptOneLetter(char letter, int offset)
         {
-            if (!letterToOffset.ContainsKey(letter))
+            if (letterToOffset.TryGetValue(letter, out var letterIndex))
+            {
+                return offsetToLetter[(letterIndex - offset + Alphabet.Length) % Alphabet.Length];
+            }
+
+            var swappedRegister = char.IsUpper(letter) ? char.ToLower(letter) : char.ToUpper(letter);
+
+            if (!letterToOffset.TryGetValue(swappedRegister, out letterIndex))
                 return letter;
 
-            var letterIndex = letterToOffset[letter];
-            var decryptedIndex = (letterIndex - offset + Alphabet.Length) % Alphabet.Length;
+            var result = offsetToLetter[(letterIndex - offset + Alphabet.Length) % Alphabet.Length];
 
-            return offsetToLetter[decryptedIndex];
+            return char.IsUpper(letter) ? char.ToUpper(result) : char.ToLower(result);
         }
     }
 }
