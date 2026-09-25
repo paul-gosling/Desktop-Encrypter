@@ -303,24 +303,24 @@
                         Converter={StaticResource PaddingConv}}" IsReadOnly="True"/>
                 <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1">
                     <Viewbox Grid.Row="1">
-                        <Button Background="#E39576" Style="{StaticResource HelpButton}">
+                        <Button Background="#E39576" Style="{StaticResource HelpButton}" Click="DeleteButton_Click">
                             <Image Source="pack://application:,,,/Pictures/cross.png" Width="12" Height="12" />
                         </Button>
                     </Viewbox>
                     <Viewbox Grid.Row="0">
-                        <Button Style="{StaticResource HelpButton}">
+                        <Button Style="{StaticResource HelpButton}" Click="LoadFileButton_Click">
                             <Image Source="pack://application:,,,/Pictures/plus.png" Width="12" Height="12"/>
                         </Button>
                     </Viewbox>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="3">
                     <Viewbox Grid.Row="0">
-                        <Button Background="#E3C776" Style="{StaticResource HelpButton}">
+                        <Button Background="#E3C776" Style="{StaticResource HelpButton}" Click="CopyButton_Click">
                             <Image Source="pack://application:,,,/Pictures/copy.png" Width="12" Height="12"/>
                         </Button>
                     </Viewbox>
                     <Viewbox Grid.Row="1">
-                        <Button Background="#76E37A" Style="{StaticResource HelpButton}">
+                        <Button Background="#76E37A" Style="{StaticResource HelpButton}" Click="SaveFileButton_Click">
                             <Image Source="/Pictures/download.png" Width="12" Height="12"/>
                         </Button>
                     </Viewbox>

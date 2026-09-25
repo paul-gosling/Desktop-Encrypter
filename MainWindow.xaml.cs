@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Encrypter.Ciphers;
+using Microsoft.Win32;
 
 namespace Encrypter
 {
@@ -20,6 +22,11 @@ namespace Encrypter
     {
         private Button currentActiveTab;
         private bool isEncrypting;
+        private bool isFileLoaded;
+
+        private string fileName;
+        private string textFromFile;
+
         private Caesar caesar;
 
         public MainWindow()
@@ -131,20 +138,71 @@ namespace Encrypter
 
         public void MainButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(keyInput.Text))
+                return;
+
+            var textToWorkWith = isFileLoaded ? textFromFile : textInput.Text;
+
             switch (currentActiveTab.Name)
             {
                 case "caesarTab":
-                    if (string.IsNullOrEmpty(keyInput.Text))
-                        break;
-
                     if (caesar.Alphabet != alphabetInput.Text)
                         caesar = new Caesar(alphabetInput.Text);
 
                     textOutput.Text = isEncrypting
-                        ? caesar.Encrypt(textInput.Text, keyInput.Text[0])
-                        : caesar.Decrypt(textInput.Text, keyInput.Text[0]);
+                        ? caesar.Encrypt(textToWorkWith, keyInput.Text[0])
+                        : caesar.Decrypt(textToWorkWith, keyInput.Text[0]);
                     break;
             }
+        }
+
+        public void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (isFileLoaded)
+            {
+                isFileLoaded = false;
+                textFromFile = ""; 
+                textInput.IsReadOnly = false;
+            }
+
+            textInput.Text = "";
+        }
+
+        public void LoadFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                isFileLoaded = true;
+                fileName = System.IO.Path.GetFileName(openFileDialog.FileName);
+                textInput.Text = fileName;
+                textInput.IsReadOnly = true;
+
+                fileName = fileName.Substring(0, fileName.Length - 4);
+
+                textFromFile = File.ReadAllText(openFileDialog.FileName);
+            }
+        }
+
+        public void SaveFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new();
+            saveFileDialog.Filter = "Text files (*.txt)|*.txt";
+
+            var saveFileName = isEncrypting ? fileName + "(encrypted)" : fileName + "(decrypted)";
+            saveFileDialog.FileName = saveFileName;
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                File.WriteAllText(saveFileDialog.FileName, textOutput.Text);
+            }
+        }
+
+        public void CopyButton_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(textOutput.Text);
         }
     }
 }
